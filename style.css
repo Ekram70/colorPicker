@@ -40,7 +40,20 @@ input[type="text"],
   border-radius: 0.25rem;
   padding: 8.5px 30px;
 }
-#output{
+
+.label-group {
+	display: flex;
+	justify-content: flex-start;
+  margin: 10px;
+}
+
+.label-group label {
+	color: #fff;
+	text-shadow: 1px 1px 0 #333, -1px -1px 0 #333, 1px -1px 0 #333,
+		-1px 1px 0 #333, 2px 2px 5px rgba(0, 0, 0, 0.65);
+}
+
+#output,#output2{
   text-transform: uppercase;
   width: 170px;
 
