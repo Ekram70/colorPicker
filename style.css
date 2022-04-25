@@ -25,33 +25,41 @@ body {
 }
 
 h1 {
-  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,1px 1px 0 #fff;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff;
   text-align: center;
+  margin-bottom: 20px;
 }
 
-input[type='text'] {
-	background-color: #fff;
-	color: #999;
-	border: #000;
-	padding: 0.5rem 1rem;
-	border-radius: 0.25rem;
-}
-
-button {
-  padding: 1rem 3rem;
-  margin: 1rem 0;
-  background-color: #000;
-  color: #fff;
-  border: 1px solid #fff;
-  border-radius: 0.25rem;
-  font-size: 18px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-}
-
-button:hover {
+input[type="text"],
+.copy-btn {
   background-color: #fff;
-  color: #000;
-  border: 1px solid #000;
+  color: #999;
+  border: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+}
+#change-btn {
+  margin-top: 10px;
+  width: 270px;
+	padding: 1rem 3rem;
+	outline: none;
+	background-color: #000;
+	color: #fff;
+	border: 1px solid #fff;
+	border-radius: 0.25rem;
+	font-size: 18px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	cursor: pointer;
+}
+
+#change-btn:hover {
+	background-color: #fff;
+	color: #000;
+	border: 1px solid #000;
+}
+.copy-btn {
+	cursor: pointer;
+
 }
