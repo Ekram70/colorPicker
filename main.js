@@ -22,19 +22,19 @@ function main() {
     const bgColor = generateHexColor();
     root.style.backgroundColor = bgColor;
     output.setAttribute("value", `${bgColor}`);
-    output.value = bgColor;
+    output.value = bgColor.slice(1);
   });
 
   copyBtn.addEventListener("click", function () {
     navigator.clipboard.writeText(output.getAttribute("value"));
-    generateToastMessage(`${output.getAttribute("value")} is Copied`);
+    generateToastMessage(`${output.getAttribute("value").toUpperCase()} is Copied`);
   });
 
   output.addEventListener("keyup", function(event){
       const color = event.target.value;
       if( isValidHex(color) ){
-        root.style.backgroundColor = color;
-        output.setAttribute("value", `${color}`);
+        root.style.backgroundColor = `#${color}`;
+        output.setAttribute("value", `#${color}`);
       }
   });
 
@@ -64,8 +64,8 @@ function generateToastMessage(msg) {
 // step 4 - Hex color validation function
 
 function isValidHex(color){
-  if( color.length == 7 && color[0] == "#"){
-    return /^#[0-9A-Fa-f]{6}$/i.test(color);
+  if( color.length == 6){
+    return /^[0-9A-Fa-f]{6}$/i.test(color);
   }
   else{
     return false;

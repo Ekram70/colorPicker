@@ -38,7 +38,30 @@ input[type="text"],
   border: #000;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
+  padding: 8.5px 30px;
 }
+#output{
+  text-transform: uppercase;
+  width: 170px;
+
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  position: relative;
+  /* overflow: hidden; */
+}
+.input-icon {
+  position: absolute;
+  padding: 0.45rem;
+  background-color: #ddd;
+  color: #424242;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
 #change-btn {
   margin-top: 10px;
   width: 270px;
@@ -80,3 +103,4 @@ input[type="text"],
 	cursor: pointer;
 	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
+
