@@ -3,6 +3,7 @@
  * Also display the hex code to the disabled input field
  * Add a button to copy the color code
  * Add a toast message when copied
+ * User can type their own hex code
  */
 
 // Step 1 - create onload handler
@@ -21,12 +22,22 @@ function main() {
     const bgColor = generateHexColor();
     root.style.backgroundColor = bgColor;
     output.setAttribute("value", `${bgColor}`);
+    output.value = bgColor;
   });
 
   copyBtn.addEventListener("click", function () {
     navigator.clipboard.writeText(output.getAttribute("value"));
     generateToastMessage(`${output.getAttribute("value")} is Copied`);
   });
+
+  output.addEventListener("keyup", function(event){
+      const color = event.target.value;
+      if( isValidHex(color) ){
+        root.style.backgroundColor = color;
+        output.setAttribute("value", `${color}`);
+      }
+  });
+
 }
 
 // step 2 - random color generator function
@@ -48,4 +59,15 @@ function generateToastMessage(msg) {
     setTimeout(() => {
       div.remove();
     }, 500)
+}
+
+// step 4 - Hex color validation function
+
+function isValidHex(color){
+  if( color.length == 7 && color[0] == "#"){
+    return /^#[0-9A-Fa-f]{6}$/i.test(color);
+  }
+  else{
+    return false;
+  }
 }
