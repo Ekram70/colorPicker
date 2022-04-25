@@ -59,7 +59,24 @@ input[type="text"],
 	color: #000;
 	border: 1px solid #000;
 }
+
 .copy-btn {
 	cursor: pointer;
 
+}
+
+/* Css for JavaScript */
+
+.toast-message {
+	position: fixed;
+	z-index: 999;
+	top: 2rem;
+	right: 2rem;
+	background-color: rgb(19, 201, 110);
+	color: #000;
+	border: 1px solid #fff;
+	border-radius: 0.25rem;
+	padding: 1rem 2rem;
+	cursor: pointer;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
