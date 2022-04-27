@@ -16,6 +16,7 @@ body {
   background-color: #dddeee;
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
 }
 
 .container {
@@ -87,6 +88,7 @@ body {
   font-weight: 600;
   font-size: 0.9rem;
   color: #333333;
+  display: block;
   user-select: none;
 }
 
@@ -110,7 +112,8 @@ label {
 /* Text Input */
 
 .text-input {
-  width: 100%;
+  width: 255px;
+  height: 35px;
   background: transparent;
   border: 1px solid #dddeee;
   border-radius: 0.15rem;
@@ -123,16 +126,21 @@ label {
   border: 1px solid #ff6733;
 }
 
-.hex-input-group {
-  position: relative;
+.hex-icon-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .hex-icon {
-  position: absolute;
-  top: 49%;
-  left: 1px;
+  display: inline-block;
+  position: relative;
+  top: 2px;
+  left: -254px;
+  height: 33px;
+  width: 35px;
   background-color: #dddeee;
-  padding: 0.2rem 1rem;
+  padding: 0.5rem 0.7rem;
   border-top-left-radius: 0.15rem;
   border-bottom-left-radius: 0.15rem;
 }

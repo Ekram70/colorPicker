@@ -20,82 +20,111 @@ function main() {
   const colorSliderBlue = document.getElementById("color-slider-blue");
 
   // handling events
-  generateRandomColor.addEventListener(
-    "click",
-    handleRandomColor(
-      colorDisplay,
-      inputHex,
-      inputRgb,
-      colorRedLabel,
-      colorGreenLabel,
-      colorBlueLabel,
-      colorSliderRed,
-      colorSliderGreen,
-      colorSliderBlue
-    )
-  );
-
-  copyToClipBoard.addEventListener(
-    "click",
-    handleCopyToClipBoard(inputHex, inputRgb)
-  );
-
-  inputHex.addEventListener(
-    "keyup",
-    handleInputHex(
-      colorDisplay,
-      inputHex,
-      inputRgb,
-      colorRedLabel,
-      colorGreenLabel,
-      colorBlueLabel,
-      colorSliderRed,
-      colorSliderGreen,
-      colorSliderBlue
-    )
-  );
-
+  generateRandomColor.addEventListener("click", handleRandomColor);
+  copyToClipBoard.addEventListener("click", handleCopyToClipBoard);
+  inputHex.addEventListener("keyup", handleInputHex);
   colorSliderRed.addEventListener(
-    "change",
-    handleColorSlider(
-      colorDisplay,
-      inputHex,
-      inputRgb,
-      colorRedLabel,
-      colorSliderRed,
-      colorSliderGreen,
-      colorSliderBlue,
-      colorSliderRed
-    )
+    "input",
+    handleColorSlider(colorRedLabel, colorSliderRed)
   );
-
   colorSliderGreen.addEventListener(
-    "change",
-    handleColorSlider(
-      colorDisplay,
-      inputHex,
-      inputRgb,
-      colorGreenLabel,
-      colorSliderRed,
-      colorSliderGreen,
-      colorSliderBlue,
-      colorSliderGreen
-    )
+    "input",
+    handleColorSlider(colorGreenLabel, colorSliderGreen)
+  );
+  colorSliderBlue.addEventListener(
+    "input",
+    handleColorSlider(colorBlueLabel, colorSliderBlue)
   );
 
-  colorSliderBlue.addEventListener(
-    "change",
-    handleColorSlider(
-      colorDisplay,
-      inputHex,
-      inputRgb,
-      colorBlueLabel,
-      colorSliderRed,
-      colorSliderGreen,
-      colorSliderBlue,
-      colorSliderBlue
-    )
-  );
+  // callback function for event handlers
+  function handleRandomColor() {
+    const color = decimalColor();
+    const hexColor = generateHexColor(color);
+    colorDisplay.style.backgroundColor = hexColor;
+    inputHex.setAttribute("value", `${hexColor.slice(1)}`);
+    inputHex.value = hexColor.slice(1);
+
+    const rbgColor = generateRgbColor(color);
+    inputRgb.setAttribute("value", `${rbgColor}`);
+    inputRgb.value = rbgColor;
+
+    colorRedLabel.innerText = color.red;
+    colorGreenLabel.innerText = color.green;
+    colorBlueLabel.innerText = color.blue;
+
+    colorSliderRed.value = color.red;
+    colorSliderGreen.value = color.green;
+    colorSliderBlue.value = color.blue;
+  }
+
+  function handleCopyToClipBoard() {
+    const checkedRadio = isCheckedRadio();
+    if (checkedRadio == "hex") {
+      navigator.clipboard.writeText(inputHex.getAttribute("value"));
+      if (isValidHex(inputHex.getAttribute("value"))) {
+        generateToastMessage(
+          `#${inputHex.getAttribute("value").toUpperCase()} is Copied`
+        );
+      } else {
+        generateToastMessage(`Invalid Color Code!`);
+      }
+    } else {
+      navigator.clipboard.writeText(inputRgb.getAttribute("value"));
+      if (isValidHex(inputHex.getAttribute("value"))) {
+        generateToastMessage(
+          `${inputRgb.getAttribute("value").toUpperCase()} is Copied`
+        );
+      } else {
+        generateToastMessage(`Invalid Color Code!`);
+      }
+    }
+  }
+
+  function handleInputHex(event) {
+    const color = event.target.value;
+    if (isValidHex(color)) {
+      colorDisplay.style.backgroundColor = `#${color}`;
+      inputHex.setAttribute("value", `${color}`);
+
+      inputRgb.setAttribute("value", `${hexToDecimal(color)}`);
+      inputRgb.value = hexToDecimal(color);
+
+      const red = parseInt(color.slice(0, 2), 16);
+      const green = parseInt(color.slice(2, 4), 16);
+      const blue = parseInt(color.slice(4), 16);
+
+      colorRedLabel.innerText = red;
+      colorGreenLabel.innerText = green;
+      colorBlueLabel.innerText = blue;
+
+      colorSliderRed.value = red;
+      colorSliderGreen.value = green;
+      colorSliderBlue.value = blue;
+
+      console.log(color);
+    }
+  }
+
+  function handleColorSlider(label, slider) {
+    return function () {
+      const red = colorSliderRed.value;
+      const green = colorSliderGreen.value;
+      const blue = colorSliderBlue.value;
+
+      colorDisplay.style.backgroundColor = `rgb(${red},${green},${blue})`;
+      inputRgb.value = `rgb(${red},${green},${blue})`;
+      inputRgb.setAttribute("value", `rgb(${red},${green},${blue})`);
+      label.innerText = slider.value;
+
+      const hex = {
+        red: Number(red),
+        green: Number(green),
+        blue: Number(blue),
+      };
+      inputHex.value = generateHexColor(hex).slice(1);
+      inputHex.setAttribute("value", generateHexColor(hex).slice(1));
+    };
+  }
 }
 
 // Utilities functions
@@ -170,94 +199,4 @@ function defaultColor() {
   document.getElementById("input-rgb").value = rgbColor;
   document.getElementById("input-hex").setAttribute("value", hexColor);
   document.getElementById("input-rgb").setAttribute("value", rgbColor);
-}
-
-// callback function for event handlers
-
-function handleRandomColor(display, hex, rgb, rl, gl, bl, slr, slg, slb) {
-  return function () {
-    const color = decimalColor();
-    const hexColor = generateHexColor(color);
-    display.style.backgroundColor = hexColor;
-    hex.setAttribute("value", `${hexColor.slice(1)}`);
-    hex.value = hexColor.slice(1);
-
-    const rbgColor = generateRgbColor(color);
-    rgb.setAttribute("value", `${rbgColor}`);
-    rgb.value = rbgColor;
-
-    rl.innerText = color.red;
-    gl.innerText = color.green;
-    bl.innerText = color.blue;
-
-    slr.value = color.red;
-    slg.value = color.green;
-    slb.value = color.blue;
-  };
-}
-
-function handleCopyToClipBoard(hex, rgb) {
-  return function () {
-    const checkedRadio = isCheckedRadio();
-    if (checkedRadio == "hex") {
-      navigator.clipboard.writeText(hex.getAttribute("value"));
-      if (isValidHex(hex.getAttribute("value"))) {
-        generateToastMessage(
-          `#${hex.getAttribute("value").toUpperCase()} is Copied`
-        );
-      } else {
-        generateToastMessage(`Invalid Color Code!`);
-      }
-    } else {
-      navigator.clipboard.writeText(rgb.getAttribute("value"));
-      if (isValidHex(hex.getAttribute("value"))) {
-        generateToastMessage(
-          `${rgb.getAttribute("value").toUpperCase()} is Copied`
-        );
-      } else {
-        generateToastMessage(`Invalid Color Code!`);
-      }
-    }
-  };
-}
-
-function handleInputHex(display, hex, rgb, rl, gl, bl, slr, slg, slb) {
-  return function (event) {
-    const color = event.target.value;
-    if (isValidHex(color)) {
-      display.style.backgroundColor = `#${color}`;
-      hex.setAttribute("value", `${color}`);
-
-      rgb.setAttribute("value", `${hexToDecimal(color)}`);
-      rgb.value = hexToDecimal(color);
-
-      const red = parseInt(color.slice(0, 2), 16);
-      const green = parseInt(color.slice(2, 4), 16);
-      const blue = parseInt(color.slice(4), 16);
-
-      rl.innerText = red;
-      gl.innerText = green;
-      bl.innerText = blue;
-
-      slr.value = red;
-      slg.value = green;
-      slb.value = blue;
-    }
-  };
-}
-
-function handleColorSlider(display, hex, rgb, l, slr, slg, slb, pref) {
-  return function () {
-    const red = slr.value;
-    const green = slg.value;
-    const blue = slb.value;
-
-    display.style.backgroundColor = `rgb(${red},${green},${blue})`;
-    rgb.value = `rgb(${red},${green},${blue})`;
-    rgb.setAttribute("value", `rgb(${red},${green},${blue})`);
-    l.innerText = pref.value;
-    hex.value = `${Number(red).toString(16)}${Number(green).toString(
-      16
-    )}${Number(blue).toString(16)}`;
-  };
 }
