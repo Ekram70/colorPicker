@@ -88,25 +88,22 @@ function main() {
   }
 
   saveColor.addEventListener("click", function () {
-    const customColorBox = document.querySelectorAll(
-      ".custom-colors .color-box"
-    );
     const divElement = document.createElement("div");
     divElement.className = "color-box";
     divElement.style.backgroundColor = `#${inputHex.getAttribute("value")}`;
     divElement.setAttribute("value", `#${inputHex.getAttribute("value")}`);
     if (!customColor.hasChildNodes()) {
       customColor.appendChild(divElement);
-    } else {
+    } else if (
+      customColor.hasChildNodes() &&
+      customColor.firstChild.getAttribute("value") !=
+        divElement.getAttribute("value")
+    ) {
       customColor.insertBefore(divElement, customColor.firstChild);
     }
 
-    if (
-      divElement.nextElementSibling &&
-      divElement.nextElementSibling.getAttribute("value") ==
-        divElement.getAttribute("value")
-    ) {
-      divElement.remove();
+    if (customColor.children.length > 12) {
+      customColor.lastChild.remove();
     }
   });
 
