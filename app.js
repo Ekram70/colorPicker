@@ -1,4 +1,31 @@
-import { defaultPresetColors, copySound } from "/resources.js";
+const defaultPresetColors = [
+  "#ffcdd2",
+  "#f8bbd0",
+  "#e1bee7",
+  "#ff8a80",
+  "#ff80ab",
+  "#ea80fc",
+  "#b39ddb",
+  "#9fa8da",
+  "#90caf9",
+  "#b388ff",
+  "#8c9eff",
+  "#82b1ff",
+  "#03a9f4",
+  "#00bcd4",
+  "#009688",
+  "#80d8ff",
+  "#84ffff",
+  "#a7ffeb",
+  "#c8e6c9",
+  "#dcedc8",
+  "#f0f4c3",
+  "#b9f6ca",
+  "#ccff90",
+  "#ffcc80",
+];
+
+const copySound = new Audio("copy-sound.wav");
 
 //Loads the main function and default color when window is loaded
 
