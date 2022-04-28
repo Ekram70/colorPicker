@@ -1,8 +1,11 @@
+import { defaultPresetColors, copySound } from "/resources.js";
+
 //Loads the main function and default color when window is loaded
 
 window.onload = () => {
-  main();
   defaultColor();
+  presetColor();
+  main();
 };
 
 function main() {
@@ -18,6 +21,11 @@ function main() {
   const colorSliderRed = document.getElementById("color-slider-red");
   const colorSliderGreen = document.getElementById("color-slider-green");
   const colorSliderBlue = document.getElementById("color-slider-blue");
+
+  const colorBox = document.getElementsByClassName("color-box");
+
+  const customColor = document.getElementById("custom-colors");
+  const saveColor = document.getElementById("save");
 
   // handling events
   generateRandomColor.addEventListener("click", handleRandomColor);
@@ -40,6 +48,40 @@ function main() {
 
     handleColorSlider(colorBlueLabel, colorSliderBlue)
   );
+
+  for (let i = 0; i < colorBox.length; i++) {
+    colorBox[i].addEventListener("click", function () {
+      navigator.clipboard.writeText(colorBox[i].getAttribute("value"));
+      copySound.volume = 0.2;
+      copySound.play();
+      generateToastMessage(
+        `${colorBox[i].getAttribute("value").toUpperCase()} is Copied`
+      );
+    });
+  }
+
+  saveColor.addEventListener("click", function () {
+    const customColorBox = document.querySelectorAll(
+      ".custom-colors .color-box"
+    );
+    const divElement = document.createElement("div");
+    divElement.className = "color-box";
+    divElement.style.backgroundColor = `#${inputHex.getAttribute("value")}`;
+    divElement.setAttribute("value", `#${inputHex.getAttribute("value")}`);
+    if (!customColor.hasChildNodes()) {
+      customColor.appendChild(divElement);
+    } else {
+      customColor.insertBefore(divElement, customColor.firstChild);
+    }
+
+    if (
+      divElement.nextElementSibling &&
+      divElement.nextElementSibling.getAttribute("value") ==
+        divElement.getAttribute("value")
+    ) {
+      divElement.remove();
+    }
+  });
 
   // callback function for event handlers
 
@@ -120,7 +162,6 @@ function main() {
       colorSliderBlue.value = blue;
     }
   }
-
   /**
    * creates a function that takes label and slide as parameter and returns a function to handel slider event
    * @param {HTMLElement} label
@@ -148,7 +189,6 @@ function main() {
     };
   }
 }
-
 // Utilities functions
 
 /**
@@ -161,7 +201,6 @@ function decimalColor() {
   const blue = Math.floor(Math.random() * 255);
   return { red, green, blue };
 }
-
 /**
  * takes a color object and generates hex color
  * @param {Object} color
@@ -263,4 +302,18 @@ function defaultColor() {
   document.getElementById("input-rgb").value = rgbColor;
   document.getElementById("input-hex").setAttribute("value", hexColor);
   document.getElementById("input-rgb").setAttribute("value", rgbColor);
+}
+
+/**
+ * Creates Preset Color boxes from Default Preset Color Array
+ */
+function presetColor() {
+  for (let i = 0; i < defaultPresetColors.length; i++) {
+    const presetColor = document.getElementById("preset-colors");
+    let divElement = document.createElement("div");
+    divElement.className = "color-box";
+    divElement.style.backgroundColor = defaultPresetColors[i];
+    divElement.setAttribute("value", defaultPresetColors[i]);
+    presetColor.appendChild(divElement);
+  }
 }

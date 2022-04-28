@@ -7,7 +7,7 @@
     <title>Color Picker App</title>
     <link rel="shortcut icon" href="icon.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css" />
-    <script src="app.js"></script>
+    <script src="app.js" type="module"></script>
   </head>
   <body>
     <div class="container" id="root">
@@ -27,7 +27,8 @@
 
         <div class="section-header">
           <h3 class="section-title">Change & Copy Color</h3>
-          <button class="section-header-action" id="copy-to-clipboard">Copy to clipboard</button>
+          <button class="section-header-action" id="save">Save</button>
+          <button class="section-header-action" id="copy-to-clipboard">Copy</button>
         </div>
         <div class="divider"></div>
 
@@ -93,6 +94,24 @@
 
           </div>
         </div>
+      </section>
+
+      <!-- Preset Colors Section -->
+      <section class="section">
+        <div class="section-header">
+          <h3 class="section-title">Presets Colors</h3>
+        </div>
+        <div class="divider"></div>
+        <div class="preset-colors" id="preset-colors"></div>
+      </section>
+
+      <!-- Custom color Section -->
+      <section class="section">
+        <div class="section-header">
+          <h3 class="section-title">Custom Colors</h3>
+        </div>
+        <div class="divider"></div>
+        <div class="custom-colors" id="custom-colors"></div>
       </section>
   </body>
 </html>
