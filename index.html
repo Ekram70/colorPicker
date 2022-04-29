@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+  
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -7,12 +8,15 @@
     <title>Color Picker App</title>
     <link rel="shortcut icon" href="icon.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css" />
+    <script src="resources.js"></script>
     <script src="app.js"></script>
   </head>
+
   <body>
     <div class="container" id="root">
 
-      <!--Display Section-->
+      <div class="container-left">
+        <!--Display Section-->
       <section class="section">
         <div class="section-header">
           <h3 class="section-title">Display Color</h3>
@@ -96,8 +100,8 @@
         </div>
       </section>
 
-      <!-- Preset Colors Section -->
-      <section class="section">
+       <!-- Preset Colors Section -->
+       <section class="section">
         <div class="section-header">
           <h3 class="section-title">Presets Colors</h3>
         </div>
@@ -105,6 +109,10 @@
         <div class="preset-colors" id="preset-colors"></div>
       </section>
 
+      </div>
+
+      <!-- Container Right -->
+      <div class="container-right">
       <!-- Custom color Section -->
       <section class="section">
         <div class="section-header">
@@ -113,5 +121,68 @@
         <div class="divider"></div>
         <div class="custom-colors" id="custom-colors"></div>
       </section>
+
+      <!-- Background image section -->
+      <section class="section">
+        <div class="section-header">
+          <h3 class="section-title">Background Preference</h3>
+        </div>
+        <div class="divider"></div>
+        <div class="background-preference">
+
+          <!-- Background Image Left -->
+          <div class="background-left-panel">
+            <p class="lead">Background Preview</p>
+            <div class="background-image" id="bg-preview"></div>
+            <div class="background-control">
+              <input type="file" class="file-input" id="bg-file-input" accept="image/*">
+              <button class="background-control-btn" id="bg-file-remove-btn">Remove</button>
+              <button class="background-control-btn" id="bg-file-upload-btn">Upload</button>
+            </div>
+          </div>
+
+          <!-- Background Image Right -->
+          <div class="background-right-panel">
+            <div class="select-group">
+              <label for="bg-size" class="lead">Background Size</label>
+              <select name="bg-size" id="bg-size" class="text-input">
+                <option value="auto">Auto</option>
+                <option value="inherit">Inherit</option>
+                <option value="contain">Contain</option>
+                <option value="cover">Cover</option>
+              </select>
+            </div>
+
+            <div class="select-group">
+              <label for="bg-repeat" class="lead">Background Repeat</label>
+              <select name="bg-repeat" id="bg-repeat" class="text-input">
+                <option value="repeat">Repeat</option>
+                <option value="no-repeat">No-repeat</option>
+              </select>
+            </div>
+
+            <div class="select-group">
+              <label for="bg-position" class="lead">Background Position</label>
+              <select name="bg-position" id="bg-position" class="text-input">
+                <option value="top">Top</option>
+                <option value="right">Right</option>
+                <option value="left">Left</option>
+                <option value="bottom">Bottom</option>
+                <option value="center">Center</option>
+              </select>
+            </div>
+
+            <div class="select-group">
+              <label for="bg-attachment" class="lead">Background attachment</label>
+              <select name="bg-attachment" id="bg-attachment" class="text-input">
+                <option value="scroll">Scroll</option>
+                <option value="fixed">Fixed</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+      </section>
+      </div>
   </body>
 </html>

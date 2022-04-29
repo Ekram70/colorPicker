@@ -1,36 +1,3 @@
-// Global variables
-
-const defaultPresetColors = [
-  "#ffcdd2",
-  "#f8bbd0",
-  "#e1bee7",
-  "#ff8a80",
-  "#ff80ab",
-  "#ea80fc",
-  "#b39ddb",
-  "#9fa8da",
-  "#90caf9",
-  "#b388ff",
-  "#8c9eff",
-  "#82b1ff",
-  "#03a9f4",
-  "#00bcd4",
-  "#009688",
-  "#80d8ff",
-  "#84ffff",
-  "#a7ffeb",
-  "#c8e6c9",
-  "#dcedc8",
-  "#f0f4c3",
-  "#b9f6ca",
-  "#ccff90",
-  "#ffcc80",
-];
-
-const copySound = new Audio("copy-sound.wav");
-
-let customColorString = "";
-
 //Loads the main function and default color when window is loaded
 
 window.onload = () => {
@@ -56,6 +23,14 @@ function main() {
   const colorBox = document.getElementsByClassName("color-box");
   const customColor = document.getElementById("custom-colors");
   const saveColor = document.getElementById("save");
+  const uploadBtn = document.getElementById("bg-file-upload-btn");
+  const fileInput = document.getElementById("bg-file-input");
+  const removeBtn = document.getElementById("bg-file-remove-btn");
+  const bgPreview = document.getElementById("bg-preview");
+  const bgSize = document.getElementById("bg-size");
+  const bgRepeat = document.getElementById("bg-repeat");
+  const bgPosition = document.getElementById("bg-position");
+  const bgAttachment = document.getElementById("bg-attachment");
 
   // handling events
   generateRandomColor.addEventListener("click", handleRandomColor);
@@ -65,17 +40,14 @@ function main() {
   // sliders event
   colorSliderRed.addEventListener(
     "input",
-
     handleColorSlider(colorRedLabel, colorSliderRed)
   );
   colorSliderGreen.addEventListener(
     "input",
-
     handleColorSlider(colorGreenLabel, colorSliderGreen)
   );
   colorSliderBlue.addEventListener(
     "input",
-
     handleColorSlider(colorBlueLabel, colorSliderBlue)
   );
 
@@ -92,6 +64,30 @@ function main() {
   }
 
   saveColor.addEventListener("click", handleCustomColor);
+
+  uploadBtn.addEventListener("click", function () {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener("change", handleFileInput);
+
+  removeBtn.addEventListener("click", handleRemoveBtn);
+
+  bgSize.addEventListener("change", function () {
+    document.body.style.backgroundSize = bgSize.value;
+  });
+
+  bgRepeat.addEventListener("change", function () {
+    document.body.style.backgroundRepeat = bgRepeat.value;
+  });
+
+  bgPosition.addEventListener("change", function () {
+    document.body.style.backgroundPosition = bgPosition.value;
+  });
+
+  bgAttachment.addEventListener("change", function () {
+    document.body.style.backgroundAttachment = bgAttachment.value;
+  });
 
   // callback function for event handlers
 
@@ -231,7 +227,28 @@ function main() {
     }
     localStorage.setItem("customColorString", customColorString.trim());
   }
+
+  /**
+   * creates image url from input and sets it to the background
+   */
+  function handleFileInput(event) {
+    const imageUrl = URL.createObjectURL(event.target.files[0]);
+    bgPreview.style.background = `url(${imageUrl})`;
+    document.body.style.background = `url(${imageUrl})`;
+  }
+
+  /**
+   * removes the image and sets default bg color
+   */
+  function handleRemoveBtn() {
+    bgPreview.style.background = "none";
+    document.body.style.background = "none";
+    bgPreview.style.backgroundColor = "#dddeee";
+    document.body.style.backgroundColor = "#dddeee";
+    fileInput.value = null;
+  }
 }
+
 // Utilities functions
 
 /**
@@ -370,8 +387,6 @@ function customColor() {
   if (localStorage.getItem("customColorString")) {
     customColorString = localStorage.getItem("customColorString");
     customColorString = customColorString.split(" ").filter((x) => x);
-    console.log(customColorString);
-    console.log(customColorString);
     for (let i = customColorString.length - 1; i >= 0; i--) {
       let divElement = document.createElement("div");
       divElement.className = "color-box";
