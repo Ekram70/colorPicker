@@ -26,12 +26,29 @@ const defaultPresetColors = [
 ];
 
 const copySound = new Audio("copy-sound.wav");
-
+let customColorString = "";
 //Loads the main function and default color when window is loaded
 
 window.onload = () => {
   defaultColor();
   presetColor();
+  const customColor = document.getElementById("custom-colors");
+
+  if (localStorage.getItem("customColorString")) {
+    customColorString = localStorage.getItem("customColorString");
+    customColorString = customColorString.split(" ").filter(x => x);
+    console.log( customColorString );
+    console.log(customColorString);
+    for (let i = customColorString.length - 1; i >= 0; i--) {
+      let divElement = document.createElement("div");
+      divElement.className = "color-box";
+      divElement.style.backgroundColor = customColorString[i];
+      divElement.setAttribute("value", customColorString[i]);
+      customColor.appendChild(divElement);
+    }
+    customColorString = customColorString.join(" ");
+  }
+  
   main();
 };
 
@@ -105,6 +122,17 @@ function main() {
     if (customColor.children.length > 12) {
       customColor.lastChild.remove();
     }
+    if (
+      !customColorString ||
+      !customColorString.includes(`#${inputHex.getAttribute("value")}`)
+    ) {
+      customColorString += ` #${inputHex.getAttribute("value")} `;
+    }
+    if (customColorString.length > 96) {
+      customColorString = customColorString.slice(8);
+    }
+    localStorage.setItem("customColorString", customColorString.trim());
+    
   });
 
   // callback function for event handlers
