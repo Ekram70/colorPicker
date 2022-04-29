@@ -1,3 +1,5 @@
+// Global variables
+
 const defaultPresetColors = [
   "#ffcdd2",
   "#f8bbd0",
@@ -26,29 +28,15 @@ const defaultPresetColors = [
 ];
 
 const copySound = new Audio("copy-sound.wav");
+
 let customColorString = "";
+
 //Loads the main function and default color when window is loaded
 
 window.onload = () => {
   defaultColor();
   presetColor();
-  const customColor = document.getElementById("custom-colors");
-
-  if (localStorage.getItem("customColorString")) {
-    customColorString = localStorage.getItem("customColorString");
-    customColorString = customColorString.split(" ").filter(x => x);
-    console.log( customColorString );
-    console.log(customColorString);
-    for (let i = customColorString.length - 1; i >= 0; i--) {
-      let divElement = document.createElement("div");
-      divElement.className = "color-box";
-      divElement.style.backgroundColor = customColorString[i];
-      divElement.setAttribute("value", customColorString[i]);
-      customColor.appendChild(divElement);
-    }
-    customColorString = customColorString.join(" ");
-  }
-  
+  customColor();
   main();
 };
 
@@ -65,9 +53,7 @@ function main() {
   const colorSliderRed = document.getElementById("color-slider-red");
   const colorSliderGreen = document.getElementById("color-slider-green");
   const colorSliderBlue = document.getElementById("color-slider-blue");
-
   const colorBox = document.getElementsByClassName("color-box");
-
   const customColor = document.getElementById("custom-colors");
   const saveColor = document.getElementById("save");
 
@@ -93,6 +79,7 @@ function main() {
     handleColorSlider(colorBlueLabel, colorSliderBlue)
   );
 
+  // all color box events
   for (let i = 0; i < colorBox.length; i++) {
     colorBox[i].addEventListener("click", function () {
       navigator.clipboard.writeText(colorBox[i].getAttribute("value"));
@@ -104,36 +91,7 @@ function main() {
     });
   }
 
-  saveColor.addEventListener("click", function () {
-    const divElement = document.createElement("div");
-    divElement.className = "color-box";
-    divElement.style.backgroundColor = `#${inputHex.getAttribute("value")}`;
-    divElement.setAttribute("value", `#${inputHex.getAttribute("value")}`);
-    if (!customColor.hasChildNodes()) {
-      customColor.appendChild(divElement);
-    } else if (
-      customColor.hasChildNodes() &&
-      customColor.firstChild.getAttribute("value") !=
-        divElement.getAttribute("value")
-    ) {
-      customColor.insertBefore(divElement, customColor.firstChild);
-    }
-
-    if (customColor.children.length > 12) {
-      customColor.lastChild.remove();
-    }
-    if (
-      !customColorString ||
-      !customColorString.includes(`#${inputHex.getAttribute("value")}`)
-    ) {
-      customColorString += ` #${inputHex.getAttribute("value")} `;
-    }
-    if (customColorString.length > 96) {
-      customColorString = customColorString.slice(8);
-    }
-    localStorage.setItem("customColorString", customColorString.trim());
-    
-  });
+  saveColor.addEventListener("click", handleCustomColor);
 
   // callback function for event handlers
 
@@ -239,6 +197,39 @@ function main() {
       inputHex.value = generateHexColor(hex).slice(1);
       inputHex.setAttribute("value", generateHexColor(hex).slice(1));
     };
+  }
+
+  /**
+   * generates custom color and adds that to local storage when the save button button is clicked
+   */
+  function handleCustomColor() {
+    const divElement = document.createElement("div");
+    divElement.className = "color-box";
+    divElement.style.backgroundColor = `#${inputHex.getAttribute("value")}`;
+    divElement.setAttribute("value", `#${inputHex.getAttribute("value")}`);
+    if (!customColor.hasChildNodes()) {
+      customColor.appendChild(divElement);
+    } else if (
+      customColor.hasChildNodes() &&
+      customColor.firstChild.getAttribute("value") !=
+        divElement.getAttribute("value")
+    ) {
+      customColor.insertBefore(divElement, customColor.firstChild);
+    }
+
+    if (customColor.children.length > 12) {
+      customColor.lastChild.remove();
+    }
+    if (
+      !customColorString ||
+      !customColorString.includes(`#${inputHex.getAttribute("value")}`)
+    ) {
+      customColorString += ` #${inputHex.getAttribute("value")} `;
+    }
+    if (customColorString.length > 96) {
+      customColorString = customColorString.slice(8);
+    }
+    localStorage.setItem("customColorString", customColorString.trim());
   }
 }
 // Utilities functions
@@ -367,5 +358,27 @@ function presetColor() {
     divElement.style.backgroundColor = defaultPresetColors[i];
     divElement.setAttribute("value", defaultPresetColors[i]);
     presetColor.appendChild(divElement);
+  }
+}
+
+/**
+ * Creates custom Color boxes using local storage
+ */
+function customColor() {
+  const customColor = document.getElementById("custom-colors");
+
+  if (localStorage.getItem("customColorString")) {
+    customColorString = localStorage.getItem("customColorString");
+    customColorString = customColorString.split(" ").filter((x) => x);
+    console.log(customColorString);
+    console.log(customColorString);
+    for (let i = customColorString.length - 1; i >= 0; i--) {
+      let divElement = document.createElement("div");
+      divElement.className = "color-box";
+      divElement.style.backgroundColor = customColorString[i];
+      divElement.setAttribute("value", customColorString[i]);
+      customColor.appendChild(divElement);
+    }
+    customColorString = customColorString.join(" ");
   }
 }
