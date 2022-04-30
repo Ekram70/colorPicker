@@ -23,10 +23,10 @@ function main() {
   const colorBox = document.getElementsByClassName("color-box");
   const customColor = document.getElementById("custom-colors");
   const saveColor = document.getElementById("save");
+  const bgPreview = document.getElementById("bg-preview");
   const uploadBtn = document.getElementById("bg-file-upload-btn");
   const fileInput = document.getElementById("bg-file-input");
   const removeBtn = document.getElementById("bg-file-remove-btn");
-  const bgPreview = document.getElementById("bg-preview");
   const bgSize = document.getElementById("bg-size");
   const bgRepeat = document.getElementById("bg-repeat");
   const bgPosition = document.getElementById("bg-position");
@@ -34,7 +34,10 @@ function main() {
 
   // handling events
   generateRandomColor.addEventListener("click", handleRandomColor);
-  copyToClipBoard.addEventListener("click", handleCopyToClipBoard);
+  copyToClipBoard.addEventListener(
+    "click",
+    handleCopyToClipBoard(inputHex.value, inputRgb.value)
+  );
   inputHex.addEventListener("keyup", handleInputHex);
 
   // sliders event
@@ -53,38 +56,28 @@ function main() {
 
   // all color box events
   for (let i = 0; i < colorBox.length; i++) {
-    colorBox[i].addEventListener("click", function () {
-      navigator.clipboard.writeText(colorBox[i].getAttribute("value"));
-      copySound.volume = 0.2;
-      copySound.play();
-      generateToastMessage(
-        `${colorBox[i].getAttribute("value").toUpperCase()} is Copied`
-      );
-    });
+    colorBox[i].addEventListener("click", handleColorBoxes(colorBox[i]));
   }
 
   saveColor.addEventListener("click", handleCustomColor);
 
+  // upload reomve btn
   uploadBtn.addEventListener("click", function () {
     fileInput.click();
   });
-
   fileInput.addEventListener("change", handleFileInput);
-
   removeBtn.addEventListener("click", handleRemoveBtn);
 
+  // background events
   bgSize.addEventListener("change", function () {
     document.body.style.backgroundSize = bgSize.value;
   });
-
   bgRepeat.addEventListener("change", function () {
     document.body.style.backgroundRepeat = bgRepeat.value;
   });
-
   bgPosition.addEventListener("change", function () {
     document.body.style.backgroundPosition = bgPosition.value;
   });
-
   bgAttachment.addEventListener("change", function () {
     document.body.style.backgroundAttachment = bgAttachment.value;
   });
@@ -107,40 +100,31 @@ function main() {
 
     inputRgb.value = rbgColor;
 
-    colorRedLabel.innerText = color.red;
-    colorGreenLabel.innerText = color.green;
-    colorBlueLabel.innerText = color.blue;
-
-    colorSliderRed.value = color.red;
-
-    colorSliderGreen.value = color.green;
-    colorSliderBlue.value = color.blue;
+    slidersAndLabels(color.red, color.green, color.blue);
   }
 
   /**
    * handles the copy to clipboard click event
    */
-  function handleCopyToClipBoard() {
-    const checkedRadio = isCheckedRadio();
-    if (checkedRadio == "hex") {
-      navigator.clipboard.writeText(inputHex.getAttribute("value"));
-      if (isValidHex(inputHex.getAttribute("value"))) {
-        generateToastMessage(
-          `#${inputHex.getAttribute("value").toUpperCase()} is Copied`
-        );
+  function handleCopyToClipBoard(inputHex, inputRgb) {
+    return function () {
+      const checkedRadio = isCheckedRadio();
+      if (checkedRadio == "hex") {
+        navigator.clipboard.writeText(inputHex);
+        if (isValidHex(inputHex)) {
+          generateToastMessage(`#${inputHex.toUpperCase()} is Copied`);
+        } else {
+          generateToastMessage(`Invalid Color Code!`);
+        }
       } else {
-        generateToastMessage(`Invalid Color Code!`);
+        navigator.clipboard.writeText(inputRgb);
+        if (isValidHex(inputHex)) {
+          generateToastMessage(`${inputRgb.toUpperCase()} is Copied`);
+        } else {
+          generateToastMessage(`Invalid Color Code!`);
+        }
       }
-    } else {
-      navigator.clipboard.writeText(inputRgb.getAttribute("value"));
-      if (isValidHex(inputHex.getAttribute("value"))) {
-        generateToastMessage(
-          `${inputRgb.getAttribute("value").toUpperCase()} is Copied`
-        );
-      } else {
-        generateToastMessage(`Invalid Color Code!`);
-      }
-    }
+    };
   }
 
   /**
@@ -159,15 +143,10 @@ function main() {
       const green = parseInt(color.slice(2, 4), 16);
       const blue = parseInt(color.slice(4), 16);
 
-      colorRedLabel.innerText = red;
-      colorGreenLabel.innerText = green;
-      colorBlueLabel.innerText = blue;
-
-      colorSliderRed.value = red;
-      colorSliderGreen.value = green;
-      colorSliderBlue.value = blue;
+      slidersAndLabels(red, green, blue);
     }
   }
+
   /**
    * creates a function that takes label and slide as parameter and returns a function to handel slider event
    * @param {HTMLElement} label
@@ -216,6 +195,9 @@ function main() {
     if (customColor.children.length > 12) {
       customColor.lastChild.remove();
     }
+
+    divElement.addEventListener("click", handleColorBoxes(divElement));
+
     if (
       !customColorString ||
       !customColorString.includes(`#${inputHex.getAttribute("value")}`)
@@ -232,6 +214,7 @@ function main() {
    * creates image url from input and sets it to the background
    */
   function handleFileInput(event) {
+    const bgPreview = document.getElementById("bg-preview");
     const imageUrl = URL.createObjectURL(event.target.files[0]);
     bgPreview.style.background = `url(${imageUrl})`;
     document.body.style.background = `url(${imageUrl})`;
@@ -247,6 +230,49 @@ function main() {
     document.body.style.backgroundColor = "#dddeee";
     fileInput.value = null;
   }
+
+  /**
+   * takes an color box div and adds functionality
+   * @param {HTMLElement} element
+   * @returns
+   */
+  function handleColorBoxes(element) {
+    return function () {
+      playSound();
+
+      const hexColor = element.getAttribute("value");
+      const red = parseInt(hexColor.slice(1).slice(0, 2), 16);
+      const green = parseInt(hexColor.slice(1).slice(2, 4), 16);
+      const blue = parseInt(hexColor.slice(1).slice(4), 16);
+      const rgbColor = `rgb(${red},${green}, ${blue})`;
+
+      colorDisplay.style.backgroundColor = hexColor;
+      inputHex.value = hexColor.slice(1);
+      inputHex.setAttribute("value", hexColor.slice(1));
+
+      inputRgb.value = rgbColor;
+      inputRgb.setAttribute("value", rgbColor);
+      slidersAndLabels(red, green, blue);
+
+      handleCopyToClipBoard(inputHex.value, inputRgb.value)();
+    };
+  }
+
+  /**
+   * handles slider and labels
+   * @param {Number} red
+   * @param {Number} green
+   * @param {Number} blue
+   */
+  function slidersAndLabels(red, green, blue) {
+    colorRedLabel.innerText = red;
+    colorGreenLabel.innerText = green;
+    colorBlueLabel.innerText = blue;
+
+    colorSliderRed.value = red;
+    colorSliderGreen.value = green;
+    colorSliderBlue.value = blue;
+  }
 }
 
 // Utilities functions
@@ -261,6 +287,7 @@ function decimalColor() {
   const blue = Math.floor(Math.random() * 255);
   return { red, green, blue };
 }
+
 /**
  * takes a color object and generates hex color
  * @param {Object} color
@@ -292,7 +319,7 @@ function generateRgbColor(color) {
 
 /**
  * converts hex to rgb
- * @param {string} hex
+ * @param {string} hex without #
  * @returns {string} rgb color with braces
  */
 function hexToDecimal(hex) {
@@ -396,4 +423,12 @@ function customColor() {
     }
     customColorString = customColorString.join(" ");
   }
+}
+
+/**
+ * volume down and play audio
+ */
+function playSound() {
+  copySound.volume = 0.2;
+  copySound.play();
 }
