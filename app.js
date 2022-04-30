@@ -4,6 +4,7 @@ window.onload = () => {
   defaultColor();
   presetColor();
   customColor();
+  bgImage();
   main();
 };
 
@@ -218,6 +219,7 @@ function main() {
     const imageUrl = URL.createObjectURL(event.target.files[0]);
     bgPreview.style.background = `url(${imageUrl})`;
     document.body.style.background = `url(${imageUrl})`;
+    localStorage.setItem("imgurl", `url(${imageUrl})`);
   }
 
   /**
@@ -229,6 +231,7 @@ function main() {
     bgPreview.style.backgroundColor = "#dddeee";
     document.body.style.backgroundColor = "#dddeee";
     fileInput.value = null;
+    localStorage.setItem("imgurl", "#dddeee");
   }
 
   /**
@@ -431,4 +434,13 @@ function customColor() {
 function playSound() {
   copySound.volume = 0.2;
   copySound.play();
+}
+
+function bgImage() {
+  if (localStorage.getItem("imgurl")) {
+    const bgPreview = document.getElementById("bg-preview");
+    const imgUrl = localStorage.getItem("imgurl");
+    bgPreview.style.background = imgUrl;
+    document.body.style.background = imgUrl;
+  }
 }
