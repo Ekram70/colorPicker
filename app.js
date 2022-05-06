@@ -37,7 +37,7 @@ function main() {
   generateRandomColor.addEventListener("click", handleRandomColor);
   copyToClipBoard.addEventListener(
     "click",
-    handleCopyToClipBoard(inputHex.value, inputRgb.value)
+    handleCopyToClipBoard(inputHex, inputRgb)
   );
   inputHex.addEventListener("keyup", handleInputHex);
 
@@ -62,8 +62,9 @@ function main() {
 
   saveColor.addEventListener("click", handleCustomColor);
 
-  // upload reomve btn
+  // upload remove btn
   uploadBtn.addEventListener("click", function () {
+    playSound();
     fileInput.click();
   });
   fileInput.addEventListener("change", handleFileInput);
@@ -89,6 +90,7 @@ function main() {
    * handles the click event of random color
    */
   function handleRandomColor() {
+    playSound();
     const color = decimalColor();
     const hexColor = generateHexColor(color);
     colorDisplay.style.backgroundColor = hexColor;
@@ -107,20 +109,21 @@ function main() {
   /**
    * handles the copy to clipboard click event
    */
-  function handleCopyToClipBoard(inputHex, inputRgb) {
+  function handleCopyToClipBoard(hex, rgb) {
     return function () {
+      playSound();
       const checkedRadio = isCheckedRadio();
       if (checkedRadio == "hex") {
-        navigator.clipboard.writeText(inputHex);
-        if (isValidHex(inputHex)) {
-          generateToastMessage(`#${inputHex.toUpperCase()} is Copied`);
+        navigator.clipboard.writeText(hex.value);
+        if (isValidHex(hex.value)) {
+          generateToastMessage(`#${hex.value.toUpperCase()} is Copied`);
         } else {
           generateToastMessage(`Invalid Color Code!`);
         }
       } else {
-        navigator.clipboard.writeText(inputRgb);
-        if (isValidHex(inputHex)) {
-          generateToastMessage(`${inputRgb.toUpperCase()} is Copied`);
+        navigator.clipboard.writeText(rgb.value);
+        if (isValidHex(hex.value)) {
+          generateToastMessage(`${rgb.value.toUpperCase()} is Copied`);
         } else {
           generateToastMessage(`Invalid Color Code!`);
         }
@@ -179,6 +182,7 @@ function main() {
    * generates custom color and adds that to local storage when the save button button is clicked
    */
   function handleCustomColor() {
+    playSound();
     const divElement = document.createElement("div");
     divElement.className = "color-box";
     divElement.style.backgroundColor = `#${inputHex.getAttribute("value")}`;
@@ -226,6 +230,7 @@ function main() {
    * removes the image and sets default bg color
    */
   function handleRemoveBtn() {
+    playSound();
     bgPreview.style.background = "none";
     document.body.style.background = "none";
     bgPreview.style.backgroundColor = "#dddeee";
@@ -257,7 +262,7 @@ function main() {
       inputRgb.setAttribute("value", rgbColor);
       slidersAndLabels(red, green, blue);
 
-      handleCopyToClipBoard(inputHex.value, inputRgb.value)();
+      handleCopyToClipBoard(inputHex, inputRgb)();
     };
   }
 
